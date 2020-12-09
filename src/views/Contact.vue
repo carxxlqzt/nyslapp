@@ -30,7 +30,12 @@ components:{
         width:70vw;
     }
     p a{
-        color: rgb(0, 62, 68);
+        color: rgb(0, 62, 68) !important;
+    &:hover{
+        text-decoration:none;
+        color:rgb(11, 129, 139)!important;
+        transition:1s linear;
+    }    
     }
     
 }

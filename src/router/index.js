@@ -29,6 +29,16 @@ const routes = [
     path:"/Profile",
     name:"User",
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+  },
+  {
+    path: '/chatroom/:id',
+    name: 'Chatroom',
+    component: () => import('../components/Chatroom.vue')
+  },
+  {
+    path: '/matches-favs',
+    name: 'UserMatches',
+    component: () => import('../components/UserMatches.vue')
   }
 
 ]

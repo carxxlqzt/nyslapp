@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import firebase from "firebase/app";
+import "firebase/auth";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     okS:true,
+    user:null,
     okO:true,
     monthA:null,
     selectedOrderS:null,
@@ -350,6 +353,15 @@ export default new Vuex.Store({
       state.monthA='october'
       
       
+    },
+    listenUser(state){
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          state.user = user
+        } else {
+          state.user = null
+        }
+      });
     }
     }
   ,

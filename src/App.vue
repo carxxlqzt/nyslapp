@@ -26,6 +26,8 @@
 
 <script>
   import Sidebar from './components/Sidebar.vue'
+  import {mapMutations} from 'vuex'
+
   export default {
     components: {
       Sidebar
@@ -36,8 +38,12 @@
            landscape:window.matchMedia("(min-width: 600px)").matches
         }
     },
+     methods:{
+    ...mapMutations(['listenUser'])
+  },
     beforeMount(){
-  window.addEventListener("resize", ()=> this.landscape=window.matchMedia("(min-width: 600px)").matches)
+  window.addEventListener("resize", ()=> this.landscape=window.matchMedia("(min-width: 600px)").matches),
+    this.listenUser()
 }
   }
 
@@ -48,6 +54,10 @@
   @import url('https://fonts.googleapis.com/css?family=Anton');
   @import url('https://use.fontawesome.com/releases/v5.8.2/css/all.css');
   @import url("https://cdn.jsdelivr.net/npm/animate.css@3.5.1");
+  a{
+    color:transparent !important;
+  text-decoration: none;
+}
   body {
     margin: 0;
     padding: 0;

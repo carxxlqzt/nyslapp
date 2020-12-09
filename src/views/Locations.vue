@@ -12,12 +12,11 @@
             </option>
        
         </select>
-        
-
+        <div class="mt-3">
         <div  v-for="(e,index) in locations.maps" :key="index" >
-          <iframe v-if="selected==e.school"  :src="e.url"></iframe>
+          <iframe  v-if="selected==e.school"  :src="e.url"></iframe>
         </div> 
-       
+       </div>
         <!-- <div  v-for="(e,index) in locations.maps" :key="index" >
             
          <div class="accordion" role="tablist">
@@ -136,9 +135,11 @@ components:{
    align-items:center;
  div{
    width:100%;
-   height:55vh;
-   margin-top:20px;
+    height:60vh;
+  
    display:flex;
+    flex-direction:column;
+
    justify-content: center;
  }
  
@@ -155,8 +156,8 @@ components:{
     justify-content:center
 }
 iframe{
-    width:80%;
-    height:100%
+    // width:80%;
+    height:60vh
 
 }
 @media (max-width: 600px){

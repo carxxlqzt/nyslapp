@@ -4,8 +4,11 @@
      <div class="main">
       <!-- <template v-if="landscape"> -->
        <div class="month"> <h1> {{locations.month1}} </h1></div>
-      <div class="calendarLS calendarS">
+      <div class="calendarLS calendarS"> 
+        <div class="dS">
+        <div class="designSch"></div>
        <div class="cont">
+        
        <div v-for="(e,index) in locations.september.dates" :key="'modal'+index" class="dateContain" >
          <template v-if="landscape">
        <button @click="changeOrderS(index)"  :class="e.class" class="btn btn-light" >
@@ -28,9 +31,9 @@
     <button v-b-modal="'modal5'" class="btn active ">
          <p>9/29</p>
         
-       </button></div> -->
+       </button> -->
              </div>
-
+</div>
        <template v-if="landscape">
           <transition  leave-active-class="animated fadeOutLeft"><h2 v-if="okS"> Check the dates</h2>
         </transition>
@@ -48,13 +51,39 @@
   <div v-for="(e,index) in locations.september.dates" :key="'modal'+index">
          <b-modal  :id="index+'y'" title="TEAMS"  ok-only ok-title="Close" ok-variant="success"> 
            <div v-if="e.date== '9/01' || e.date=='9/08'|| e.date=='9/15' || e.date=='9/22'|| e.date=='9/29'" >
+            <div class="box-info">
+              <div>
              <h2>{{e.teams1.teams}}</h2>
-           Location: {{e.teams1.location}} <br> Time: {{e.teams1.times}} <br>
+           Location: {{e.teams1.location}} <br> Time: {{e.teams1.times}}
+            </div>
+            <div class="b-options">
+              <div > <router-link :to="'/chatroom/' + index +'a'">
+            <b-button>
+              <i class="fas fa-comments"></i>
+            </b-button>
+            </router-link></div>
+            <div><i @click="addFav('september',index,'teams1')" class="fas fa-star  ic"  ></i></div>
+            </div>
+            </div>
+            <br>
+             <div class="box-info">
+              <div>
            <h2> {{e.teams2.teams}}</h2>
           <p class="m-0" v-if="e.teams2.location!==null" >Location: {{e.teams2.location}}</p> <p v-if="e.teams2.times!==null">Time: {{e.teams2.times}}</p> 
            </div>
+            <div class="b-options">
+              <div v-if="e.teams2.location!==null">
+          <router-link :to="'/chatroom/' + index +'b'">
+            <b-button>
+              <i class="fas fa-comments"></i>
+            </b-button>
+            </router-link></div>
+            <div v-if="e.teams2.location!==null"><i @click="addFav('september',index,'teams2')" class="fas fa-star ic"  ></i></div>
+            </div>
+            </div>
+           </div>
              <div v-else>
-             <h2>no dates</h2>
+             <h2>There are no competitions on this date</h2>
           
            </div>
             </b-modal> </div>
@@ -69,6 +98,8 @@
 
   <div class="month"> <h1> {{locations.month2}} </h1></div>
   <div  class="calendarLS calendarS">
+     <div class="dS">
+        <div class="designSch"></div>
   <div class="cont">
        <div  v-for="(el,index) in locations.october.dates" :key="index+'n'" class="dateContain" >
          <!-- <button v-b-modal="index+'modal'" :class="e.class" class="btn btn-light">
@@ -102,6 +133,8 @@
      </div>
        
      </div>
+     </div>
+
      <template v-if="landscape">
           <transition  leave-active-class="animated fadeOutLeft"><h2 v-if="okO">Check the dates</h2>
         </transition>
@@ -115,11 +148,36 @@
      <div v-for="(e,index) in locations.october.dates" :key="index">
          <b-modal :id="index+'modal'" title="TEAMS" ok-only ok-title="Close" ok-variant="success" >
           <div v-if="e.date== '10/06' || e.date=='10/13'|| e.date=='10/20' || e.date=='10/27'" >
-
+             <div class="box-info">
+              <div>
             <h2>{{e.teams1.teams}}</h2>
-           Location: {{e.teams1.location}} <br> Time: {{e.teams1.times}} <br>
+           Location: {{e.teams1.location}} <br> Time: {{e.teams1.times}}
+              </div>
+              <div>
+                <div class="b-options">
+            <router-link :to="'/chatroom/' + index +'i'">
+            <b-button>
+              <i class="fas fa-comments"></i>
+            </b-button>
+            </router-link></div>
+            <div><i @click="addFav('october',index,'teams1')" class="fas fa-star ic"  ></i></div>
+             </div>
+            </div> <br>
+            <div class="box-info">
+              <div>
            <h2> {{e.teams2.teams}}</h2>
            Location: {{e.teams2.location}} <br> Time: {{e.teams2.times}}
+           </div>
+           <div class="b-options">
+             <div>
+            <router-link :to="'/chatroom/' + index +'j'">
+            <b-button>
+              <i class="fas fa-comments"></i>
+            </b-button>
+            </router-link></div>
+            <div><i @click="addFav('october',index,'teams2')" class="fas fa-star ic"  ></i></div>
+            </div>
+            </div>
            </div>
             <div v-else>
               no dates
@@ -135,17 +193,20 @@
 <script>
 
 import{mapMutations,mapState} from "vuex"
+import { db } from "../firebase/db";
+
 import  Titulo from "../components/Titulo.vue"
 import MoreInfo from "../components/MoreInfo.vue"
 export default {
  data:function(){
         return{
          
-           landscape:window.matchMedia("(min-width: 600px)").matches
+           landscape:window.matchMedia("(min-width: 600px)").matches,
+           fav:false
         }
     },
   computed:{
-    ...mapState(["locations","selectedOrderS","selectedOrderO","okS","okO",'monthA'])
+    ...mapState(["locations","selectedOrderS","selectedOrderO","okS","okO",'monthA','user'])
   },
 components:{
     Titulo,
@@ -153,6 +214,18 @@ components:{
 },
 methods:{
  ...mapMutations(['changeOrderS','changeOrderO']),
+  addFav(month,index,teams){
+        if(this.fav){
+            this.fav=false;
+
+        }else{
+         this.fav=true;
+      let fold = db.ref("users" + this.user.uid +'/matches');
+      let post= this.locations[month].dates[index][teams]
+fold.push(post)
+        }
+
+    }
 
 //  this.changeMsg("Holaa")
 },
@@ -185,16 +258,34 @@ beforeMount(){
     margin-top:2%;
     
   }
-  
+  .box-info{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+  }
+  .b-options{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    button{
+      background:pink !important;
+      &:hover{
+        background-color: rgb(209, 84, 209) !important;
+      }
+    }
+
+
+  }
   .cont{
-  
+    // width:60%;
     height:170px;
     background:rgb(192, 188, 188);
     display:grid;
-    grid-gap:2px;
+    grid-gap:4px;
     grid-template-columns: repeat(7,1fr);
     grid-template-rows: 1fr 1fr 1fr 1fr;
-
+    border-radius:10px;
+    // padding:4px;
     // flex-direction:row;
     // flex-wrap: wrap;
     margin-top:2%;
@@ -225,6 +316,7 @@ padding:3px;
   }
  
 @media (min-width: 600px) {
+  
   .container{
    position:fixed;
    padding:0px;
@@ -243,6 +335,10 @@ padding:3px;
   }
 }
 @media (max-width: 600px) {
+  .designSch{
+    border:rgba(255, 255, 255, 0.541) solid !important;
+    background:rgba(255, 255, 255, 0.603)
+  }
   .calendarS{
     width:100%;
     display:flex;
@@ -254,5 +350,18 @@ padding:3px;
     color:rgba(255, 255, 255, 0.87)
   }
 }
-
+.designSch{
+  width:100%;
+  height:3.5vh;
+  border:rgb(75, 72, 72) solid 2px;
+  border-radius:5px;
+}
+.dS{
+  display:flex;
+  flex-direction: column;
+}
+.ic:active{
+   transform: translateY(5px);
+  // scale: 2;
+}
 </style>
